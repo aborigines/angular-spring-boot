@@ -1,9 +1,4 @@
-stages:
-  - frontend-build
-  - backend-build-include-frontend
-
 frontend-build-job:
-  stage: frontend-build
   image: coexcz/node-alpine
   scripts:
     - git clone https://github.com/aborigines/angular-webpack-docker-nginx.git
@@ -13,7 +8,6 @@ frontend-build-job:
       - target/classes/static
 
 backend-build-job:
-  stage: backend-build-include-frontend
   image: maven:3.6.3-jdk-11-slim
   scripts:
     - ./mvnw install
