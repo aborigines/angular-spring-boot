@@ -1,16 +1,36 @@
 stages:
+  - test:frontend
   - build:frontend
   - build:backend_include_frontend
 
-build-frontend:
-  stage: build:frontend
-  image: coexcz/node-alpine
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
     - .npm/
+    - .m2/
+
+test-frontend:
+  stage: test:frontend
+  image: coexcz/node-alpine # node:12-alpine with git
+  when: manual
   script:
     - git clone https://github.com/aborigines/angular-webpack-docker-nginx.git angular-webpack-docker-nginx
+    - cd angular-webpack-docker-nginx
+    - npm install --no-package-lock
+    - npm run test
+  artifacts:
+    paths:
+      - angular-webpack-docker-nginx
+
+build-frontend:
+  stage: build:frontend
+  dependencies:
+    - test-frontend
+  needs:
+    - job: test-frontend
+      artifacts: true
+  image: coexcz/node-alpine # node:12-alpine with git
+  script:
     - cd angular-webpack-docker-nginx
     - npm install --no-package-lock
     - npm run build
