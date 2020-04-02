@@ -1,20 +1,35 @@
 stages:
-  - build
+  - build:frontend
+  - build:backend_include_frontend
 
 build-frontend:
+  stage: build:frontend
   image: coexcz/node-alpine
-  scripts:
-    - git clone https://github.com/aborigines/angular-webpack-docker-nginx.git
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+    - .npm/
+  script:
+    - git clone https://github.com/aborigines/angular-webpack-docker-nginx.git angular-webpack-docker-nginx
+    - cd angular-webpack-docker-nginx
+    - npm install --no-package-lock
     - npm run build
   artifacts:
     paths:
-      - target/classes/static
+      - angular-webpack-docker-nginx/target/classes/static
 
 build-backend-include-frontend:
-  image: maven:3.6.3-jdk-11-slim
-  scripts:
-    - ./mvnw install
-  dependencies: frontend-build-job
+  stage: build:backend_include_frontend
+  dependencies:
+    - build-frontend
+  needs:
+    - job: build-frontend
+      artifacts: true
+  image: maven:3.6-jdk-11-slim
+  script:
+    - mkdir -p target/classes/
+    - cp -r angular-webpack-docker-nginx/target/classes/static target/classes/
+    - ./mvnw package
   artifacts:
     paths:
       - target
