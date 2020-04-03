@@ -6,6 +6,11 @@ the frontend from [my repository](https://github.com/aborigines/angular-webpack-
 
 this project inspiration from [jhipster](http://jhipster.tech)
 
+## prerequisite
+
+- angular 9.1
+- spring boot 2 (with java 11)
+
 ## step build gitlab-ci
 
 - test the frontend
