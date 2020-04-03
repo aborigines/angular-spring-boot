@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  angular-webpack-docker-nginx:
+    build:
+      context: .
+      args:
+        API_URL: http://localhost:3000
+    container_name: angular-webpack-docker-nginx
+    ports:
+      - 80:80

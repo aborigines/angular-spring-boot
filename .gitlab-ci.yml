@@ -11,16 +11,14 @@ cache:
 
 test-frontend:
   stage: test:frontend
-  image: coexcz/node-alpine # node:12-alpine with git
+  image: node:12-alpine
   when: manual
   script:
-    - git clone https://github.com/aborigines/angular-webpack-docker-nginx.git angular-webpack-docker-nginx
-    - cd angular-webpack-docker-nginx
     - npm install --no-package-lock
     - npm run test
   artifacts:
     paths:
-      - angular-webpack-docker-nginx
+      - node_modules/
 
 build-frontend:
   stage: build:frontend
@@ -29,14 +27,12 @@ build-frontend:
   needs:
     - job: test-frontend
       artifacts: true
-  image: coexcz/node-alpine # node:12-alpine with git
+  image: node:12-alpine
   script:
-    - cd angular-webpack-docker-nginx
-    - npm install --no-package-lock
     - npm run build
   artifacts:
     paths:
-      - angular-webpack-docker-nginx/target/classes/static
+      - target/classes/static
 
 build-backend-include-frontend:
   stage: build:backend_include_frontend
@@ -47,8 +43,6 @@ build-backend-include-frontend:
       artifacts: true
   image: maven:3.6-jdk-11-slim
   script:
-    - mkdir -p target/classes/
-    - cp -r angular-webpack-docker-nginx/target/classes/static target/classes/
     - ./mvnw package
   artifacts:
     paths:

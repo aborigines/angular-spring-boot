@@ -1,0 +1,12 @@
+node_modules/
+jest.config.js
+webpack/
+target/
+build/
+node/
+dist/
+e2e/
+postcss.config.js
+src/test/
+src/main/webapp/main.ts
+src/main/webapp/polyfills.ts
