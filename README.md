@@ -2,8 +2,6 @@
 
 built in angular to spring boot backend
 
-the frontend from [my repository](https://github.com/aborigines/angular-webpack-docker-nginx)
-
 this project inspiration from [jhipster](http://jhipster.tech)
 
 ## prerequisite
