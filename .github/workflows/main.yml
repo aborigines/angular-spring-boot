@@ -69,5 +69,5 @@ jobs:
       - name: upload artifact job build:backend_include_frontend
         uses: actions/upload-artifact@v1
         with:
-          name: target
+          name: target-build-backend-include-frontend
           path: target
