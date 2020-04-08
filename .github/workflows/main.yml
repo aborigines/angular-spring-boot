@@ -1,0 +1,73 @@
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test-frontend:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: set node
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - name: test:frontend
+      run: |
+        npm install --no-package-lock
+        npm run test
+    - name: cache file
+      uses: actions/cache@v1.1.2
+      with:
+        path: node_modules/
+        key: node_modules
+
+  build-frontend:
+    needs: test-frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: set node lts 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: load cache node_modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules/
+          key: node_modules
+      - name: build:frontend
+        run: npm run build
+      - name: Upload artifact job build-frontend
+        uses: actions/upload-artifact@v1
+        with:
+          name: target-build-frontend
+          path: target/
+
+  build-backend-include-frontend:
+    needs: build-frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: set java
+        uses: joschi/setup-jdk@v1
+        with:
+          java-version: 11
+          architecture: x64
+      - name: set mvn
+        uses: stCarolas/setup-maven@v3
+        with:
+          maven-version: 3.6.3
+      - name: download artifact from job build-frontend
+        uses: actions/download-artifact@v1
+        with:
+          name: target-build-frontend
+          path: target/
+      - name: build:backend_include_frontend
+        run: ./mvnw package
+      - name: upload artifact job build:backend_include_frontend
+        uses: actions/upload-artifact@v1
+        with:
+          name: target-build-backend-include-frontend
+          path: target
