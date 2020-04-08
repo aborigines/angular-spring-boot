@@ -43,7 +43,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: target-build-frontend
-          path: target
+          path: target/
 
   build-backend-include-frontend:
     needs: build-frontend
@@ -63,6 +63,7 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: target-build-frontend
+          path: target/
       - name: build:backend_include_frontend
         run: ./mvnw package
       - name: upload artifact job build:backend_include_frontend
