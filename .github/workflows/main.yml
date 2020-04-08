@@ -22,8 +22,9 @@ jobs:
       with:
         path: node_modules/
         key: ${{ runner.os }}-node_modules
-  
+
   build-frontend:
+    needs: test-frontend
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -48,28 +49,29 @@ jobs:
           key: ${{ runner.os }}-frontend_build
 
   build-backend-include-frontend:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2
-        - name: set java
-          uses: joschi/setup-jdk@v1
-          with:
-            java-version: 11
-            architecture: x64
-        - name: set mvn
-          uses: stCarolas/setup-maven@v3
-          with: 
-            maven-version: 3.6.3
-        - name: set cache
-          uses: actions/cache@v1
-          id: cache
-          with:
-            path: target/
-            key: ${{ runner.os }}-frontend_build
-        - name: build:backend_include_frontend
-          run: ./mvnw package
-        - name: cache file
-          uses: actions/cache@v1.1.2
-          with:
-            path: target
-            key: ${{ runner.os }}-backend_include_frontend
+    needs: build-frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: set java
+        uses: joschi/setup-jdk@v1
+        with:
+          java-version: 11
+          architecture: x64
+      - name: set mvn
+        uses: stCarolas/setup-maven@v3
+        with:
+          maven-version: 3.6.3
+      - name: set cache
+        uses: actions/cache@v1
+        id: cache
+        with:
+          path: target/
+          key: ${{ runner.os }}-frontend_build
+      - name: build:backend_include_frontend
+        run: ./mvnw package
+      - name: cache file
+        uses: actions/cache@v1.1.2
+        with:
+          path: target
+          key: ${{ runner.os }}-backend_include_frontend
