@@ -27,6 +27,7 @@ jobs:
     needs: test-frontend
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: set node lts 12
         uses: actions/setup-node@v1
         with:
@@ -51,6 +52,7 @@ jobs:
     needs: build-frontend
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: set java
         uses: joschi/setup-jdk@v1
         with:
