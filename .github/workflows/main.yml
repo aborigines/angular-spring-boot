@@ -21,7 +21,7 @@ jobs:
       uses: actions/cache@v1.1.2
       with:
         path: node_modules/
-        key: ${{ runner.os }}-node_modules
+        key: node_modules
 
   build-frontend:
     needs: test-frontend
@@ -36,16 +36,14 @@ jobs:
         uses: actions/cache@v1
         with:
           path: node_modules/
-          key: ${{ runner.os }}-node_modules
+          key: node_modules
       - name: build:frontend
-        run: |
-            npm run build
-            npm run test
-      - name: cache file
-        uses: actions/cache@v1.1.2
+        run: npm run build
+      - name: Upload artifact job build-frontend
+        uses: actions/upload-artifact@v1
         with:
+          name: target
           path: target
-          key: ${{ runner.os }}-build_frontend
 
   build-backend-include-frontend:
     needs: build-frontend
@@ -61,14 +59,14 @@ jobs:
         uses: stCarolas/setup-maven@v3
         with:
           maven-version: 3.6.3
-      - name: load cache
-        uses: actions/cache@v1
+      - name: download artifact from job build-frontend
+        uses: actions/download-artifact@v1
         with:
-          path: .
-          key: ${{ runner.os }}-build_frontend
+          name: target
       - name: build:backend_include_frontend
         run: ./mvnw package
-      - uses: actions/upload-artifact@v1
+      - name: upload artifact job build:backend_include_frontend
+        uses: actions/upload-artifact@v1
         with:
           name: artifact
           path: target
