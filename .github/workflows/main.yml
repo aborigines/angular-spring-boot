@@ -27,7 +27,6 @@ jobs:
     needs: test-frontend
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
       - name: set node lts 12
         uses: actions/setup-node@v1
         with:
@@ -52,7 +51,6 @@ jobs:
     needs: build-frontend
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
       - name: set java
         uses: joschi/setup-jdk@v1
         with:
@@ -70,8 +68,7 @@ jobs:
           key: ${{ runner.os }}-frontend_build
       - name: build:backend_include_frontend
         run: ./mvnw package
-      - name: cache file
-        uses: actions/cache@v1.1.2
+      - uses: actions/upload-artifact@v1
         with:
+          name: artifact
           path: target
-          key: ${{ runner.os }}-backend_include_frontend
