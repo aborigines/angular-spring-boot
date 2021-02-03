@@ -1,4 +1,5 @@
 stages:
+  - test:frontend
   - build:frontend
   - build:backend_include_frontend
 
@@ -8,8 +9,23 @@ cache:
     - .npm/
     - .m2/
 
+test-frontend:
+  stage: test:frontend
+  image: node:12-alpine
+  script:
+    - npm install --no-package-lock
+    - npm run test
+  artifacts:
+    paths:
+      - node_modules/
+
 build-frontend:
   stage: build:frontend
+  dependencies:
+    - test-frontend
+  needs:
+    - job: test-frontend
+      artifacts: true
   image: node:12-alpine
   script:
     - npm run build
