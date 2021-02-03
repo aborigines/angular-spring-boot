@@ -12,7 +12,6 @@ cache:
 test-frontend:
   stage: test:frontend
   image: node:12-alpine
-  when: manual
   script:
     - npm install --no-package-lock
     - npm run test
