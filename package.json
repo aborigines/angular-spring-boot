@@ -21,7 +21,7 @@
     "webpack:prod": "npm run cleanup && npm run webpack:prod:main && npm run clean-www",
     "webpack:test": "npm run test",
     "webpack-dev-server": "node --max_old_space_size=4096 --max-http-header-size=81000 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
-    "webpack": "node --max_old_space_size=6096 --max-http-header-size=81000 node_modules/webpack/bin/webpack.js"
+    "webpack": "node --max-http-header-size=81000 node_modules/webpack/bin/webpack.js"
   },
   "private": true,
   "dependencies": {
