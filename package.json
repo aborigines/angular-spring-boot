@@ -81,7 +81,7 @@
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "postcss-loader": "^3.0.0",
     "prettier": "1.19.1",
-    "protractor": "~5.4.3",
+    "protractor": "~5.4.4",
     "sass": "^1.26.3",
     "sass-loader": "^8.0.2",
     "simple-progress-webpack-plugin": "^1.1.2",
